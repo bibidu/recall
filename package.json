@@ -1,0 +1,23 @@
+{
+  "name": "recall",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bibidu/recall.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bibidu/recall/issues"
+  },
+  "homepage": "https://github.com/bibidu/recall#readme",
+  "dependencies": {
+    "postcss": "^7.0.17"
+  }
+}
