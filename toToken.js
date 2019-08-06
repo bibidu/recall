@@ -10,7 +10,8 @@ const {
   isHash,
   isAnd,
   isSingleQuot,
-  isDoubleQuot
+  isDoubleQuot,
+  isDot
 } = require('./utils/token')
 
 module.exports = function toToken(input) {
@@ -67,6 +68,8 @@ module.exports = function toToken(input) {
       tokens.push({ type: 'singleQuot', value: current, start: i, end: i + 1, isSingleQuot: true })
     } else if (isDoubleQuot(current)) {
       tokens.push({ type: 'doubleQuot', value: current, start: i, end: i + 1, isDoubleQuot: true })
+    } else if (isDot(current)) {
+      tokens.push({ type: 'dot', value: current, start: i, end: i + 1 })
     } else {
       console.log('else');
       console.log(current);

@@ -34,6 +34,9 @@ function isSingleQuot(v) {
 function isDoubleQuot(v) {
   return v === '"'
 }
+function isDot(v) {
+  return v === '.'
+}
 module.exports = {
   isWord,
   isLeftBracket,
@@ -46,5 +49,6 @@ module.exports = {
   isHash,
   isAnd,
   isSingleQuot,
-  isDoubleQuot
+  isDoubleQuot,
+  isDot
 }

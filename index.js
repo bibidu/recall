@@ -1,10 +1,11 @@
-const input = `body {
+const input = `body .a {
   color: red;
   border: 1px solid #ccc;
   &:after{
     content: '';
   }
-}`
+}
+#app {}`
 const toToken = require('./toToken')
 const toSyntax = require('./toSyntax')
 
