@@ -1,61 +1,44 @@
-// const input = `body {
-//   color: red;
-//   border: 1px solid #ccc;
-//   &:after{
-//     content: '';
-//   }
-// }`
-// syntax
-// attr | value | selector
-// const {
-//   isAttr,
-//   isValue,
-//   isSelector
-// } = require('./utils/syntax')
+// 问题的关键
+// 依次检查后面token 当先碰到{ 则当前token为selector。先碰到; 则当前token是attr
 const TokenUtil = require('./utils/TokenUtil')
 
-// body: {
-//   children: [
-//     {
-//       color: red
-//     },
-//     '&:after': {
-//       children: []
-//     }
-//   ]
-// }
 module.exports = function toSyntax(tokens) {
-  let results = '{'
-  let current = {}
+  let id = 0
+  const results = []
+  const fathersId = []
+  let strPool = '', current = {}
   const tokenUtil = new TokenUtil(tokens)
+  
   for (let i = 0; i < tokens.length; i++) {
     current = tokens[i]
 
-    // if (isSelector(current)) {
-    //   results += current.value
-    // } else if (isAttr(current)) {
-    //   results += current.value
-    // } else if (isValue(current)) {
-    //   results += '"' + current.value + '"'
-    // } else if (isSemicolon(current)) {
-    //   results += ','
-    // } else if (isLeftBracket(current)) {
-    //   results += ':' + current.value
-    // } else if (isRightBracket(current) || isEnter(current)) {
-    //   results += current.value
-    // }
+    if (!current.isLeftBracket && !current.isSemicolon) {
+      strPool += current.value
+    }
+
     if (current.isLeftBracket) {
-      results += ':' + current.value
-    } else if (current.isRightBracket) {
-      results += '' + current.value
+      results.push({ id: ++id, type: 'selector', value: strPool, fatherId: fathersId.length ? fathersId[fathersId.length - 1] : -1 })
+      strPool = ''
+      fathersId.push(id)
+    } else if (current.isColon) {
+      if (tokenUtil.prev(i).isAnd) {
+        // strPool += current.value
+      } else {
+        if (tokenUtil.isSelector(i)) {
+          results.push({ id: ++id, type: 'selector', value: strPool, fatherId: fathersId.length ? fathersId[fathersId.length - 1] : -1 })
+          strPool = ''
+          fathersId.push(id)
+        } else {
+          results.push({ id: ++id, type: 'attr', value: strPool.slice(0, strPool.length - 1), fatherId: fathersId.length ? fathersId[fathersId.length - 1] : -1 })
+          strPool = ''
+        }
+      }
     } else if (current.isSemicolon) {
-      results += ','
-    } else {
-      results += current.value
+      results.push({ id: ++id, type: 'value', value: strPool, fatherId: fathersId.length ? fathersId[fathersId.length - 1] : -1 })
+      strPool = ''
+    } else if (current.isRightBracket) {
+      fathersId.pop()
     }
   }
-  results += '}'
-
-  console.log(results);
+  return results
 }
-

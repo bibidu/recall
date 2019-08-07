@@ -37,6 +37,10 @@ function isDoubleQuot(v) {
 function isDot(v) {
   return v === '.'
 }
+function isHyphen(v) {
+  return v === '-'
+}
+
 module.exports = {
   isWord,
   isLeftBracket,
@@ -50,5 +54,6 @@ module.exports = {
   isAnd,
   isSingleQuot,
   isDoubleQuot,
-  isDot
+  isDot,
+  isHyphen
 }

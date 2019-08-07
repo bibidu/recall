@@ -11,7 +11,8 @@ const {
   isAnd,
   isSingleQuot,
   isDoubleQuot,
-  isDot
+  isDot,
+  isHyphen
 } = require('./utils/token')
 
 module.exports = function toToken(input) {
@@ -69,9 +70,11 @@ module.exports = function toToken(input) {
     } else if (isDoubleQuot(current)) {
       tokens.push({ type: 'doubleQuot', value: current, start: i, end: i + 1, isDoubleQuot: true })
     } else if (isDot(current)) {
-      tokens.push({ type: 'dot', value: current, start: i, end: i + 1 })
+      tokens.push({ type: 'dot', value: current, start: i, end: i + 1, isDot: true })
+    } else if (isHyphen(current)) {
+      tokens.push({ type: 'hyphen', value: current, start: i, end: i + 1, isHyphen: true })
     } else {
-      console.log('else');
+      console.log('未知字符');
       console.log(current);
     }
   }
@@ -84,25 +87,27 @@ module.exports = function toToken(input) {
 
 // 检查是否有遗漏的token
 function check(tokens) {
+  // console.log(tokens.map(item => {
+  //   Object.keys(item).forEach(k => {
+  //     if (/^is/.test(k)) {
+  //       delete item[k]
+  //     }
+  //   })
+  //   return item
+  // }));
+  // const errorChar = []
   let flag = true, lastEnd = 0, current = 0
   for (let i = 0; i < tokens.length; i++) {
     current = tokens[i]
     if (current.start !== lastEnd) {
+      // errorChar.push(current)
       flag = false
       break
     }
     lastEnd = current.end
   }
+  // console.log(errorChar);
   return flag
 }
 
 
-// const postcss = require('postcss')
-// const plugin = postcss.plugin('p', (opts) => {
-//   return (root, result) => {
-//     console.log(root);
-//   }
-// })
-// postcss([plugin]).process(input, {from: undefined}).then(res => {
-//   console.log(res.css);
-// })

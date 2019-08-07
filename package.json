@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/bibidu/recall#readme",
   "dependencies": {
-    "postcss": "^7.0.17"
+    "postcss": "^7.0.17",
+    "vue-template-compiler": "^2.6.10"
   }
 }
